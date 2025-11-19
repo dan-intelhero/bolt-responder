@@ -1,9 +1,8 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card } from "@/components/ui/card";
-import { Loader2, Send, CheckCircle2, AlertCircle } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Loader2, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import ReactMarkdown from "react-markdown";
 
@@ -19,6 +18,7 @@ export const BoltFollowUp = () => {
   const [response, setResponse] = useState<WebhookResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
+  const resultsRef = useRef<HTMLDivElement>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -70,11 +70,17 @@ export const BoltFollowUp = () => {
 
       const data = await result.json();
       setResponse(data);
+      setError(null);
       
       toast({
         title: "Success!",
-        description: "Bolt follow-up workflow completed",
+        description: "Follow-up sent successfully",
       });
+
+      // Scroll to results
+      setTimeout(() => {
+        resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Failed to process request";
       setError(errorMessage);
@@ -128,12 +134,10 @@ export const BoltFollowUp = () => {
     if (Array.isArray(response) && response.length > 0 && response[0].text) {
       return (
         <Card className="p-6 bg-card border-border shadow-soft animate-in fade-in slide-in-from-bottom-4 duration-500">
-          <div className="flex items-start gap-3 mb-4">
-            <CheckCircle2 className="h-5 w-5 text-accent mt-0.5 flex-shrink-0" />
-            <div className="flex-1">
-              <h3 className="font-semibold text-lg text-foreground mb-4">Analysis Results</h3>
-              <div className="prose prose-sm max-w-none dark:prose-invert prose-headings:text-foreground prose-p:text-foreground prose-strong:text-foreground prose-ul:text-foreground prose-ol:text-foreground">
-                <ReactMarkdown
+          <div className="flex-1">
+            <h3 className="font-semibold text-lg text-foreground mb-4">Analysis Results</h3>
+            <div className="prose prose-sm max-w-none dark:prose-invert prose-headings:text-foreground prose-p:text-foreground prose-strong:text-foreground prose-ul:text-foreground prose-ol:text-foreground">
+              <ReactMarkdown
                   components={{
                     h2: ({ children }) => (
                       <h2 className="text-xl font-bold text-foreground mt-6 mb-3 border-b border-border pb-2">
@@ -181,7 +185,6 @@ export const BoltFollowUp = () => {
                 </ReactMarkdown>
               </div>
             </div>
-          </div>
         </Card>
       );
     }
@@ -189,11 +192,9 @@ export const BoltFollowUp = () => {
     // Default object rendering for other response types
     return (
       <Card className="p-6 bg-card border-border shadow-soft animate-in fade-in slide-in-from-bottom-4 duration-500">
-        <div className="flex items-start gap-3 mb-4">
-          <CheckCircle2 className="h-5 w-5 text-accent mt-0.5 flex-shrink-0" />
-          <div className="flex-1">
-            <h3 className="font-semibold text-lg text-foreground mb-2">Workflow Response</h3>
-            <div className="space-y-4">
+        <div className="flex-1">
+          <h3 className="font-semibold text-lg text-foreground mb-2">Workflow Response</h3>
+          <div className="space-y-4">
               {Object.entries(response).map(([key, value]) => (
                 <div key={key} className="border-l-2 border-accent/30 pl-4 py-1">
                   <div className="text-sm font-medium text-muted-foreground mb-1">
@@ -206,7 +207,6 @@ export const BoltFollowUp = () => {
               ))}
             </div>
           </div>
-        </div>
       </Card>
     );
   };
@@ -229,78 +229,69 @@ export const BoltFollowUp = () => {
 
   return (
     <div className="space-y-6">
-      <Card className="p-6 bg-card border-border shadow-elevated">
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="email" className="text-foreground font-medium">
-              Email Address
-            </Label>
+      <Card className="border-border shadow-soft">
+        <CardContent className="pt-6">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <Input
               id="email"
               type="email"
-              placeholder="Enter email address"
+              placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               disabled={loading}
               className="bg-background border-input"
               required
             />
-          </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="domain" className="text-foreground font-medium">
-              Domain
-            </Label>
             <Input
               id="domain"
               type="text"
-              placeholder="Enter domain"
+              placeholder="Domain"
               value={domain}
               onChange={(e) => setDomain(e.target.value)}
               disabled={loading}
               className="bg-background border-input"
               required
             />
-          </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="myEmail" className="text-foreground font-medium">
-              My Email
-            </Label>
             <Input
               id="myEmail"
               type="email"
-              placeholder="Enter your email address"
+              placeholder="My Email"
               value={myEmail}
               onChange={(e) => setMyEmail(e.target.value)}
               disabled={loading}
               className="bg-background border-input"
               required
             />
-          </div>
-          
-          <Button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-soft transition-all"
-          >
-            {loading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Processing...
-              </>
-            ) : (
-              <>
-                <Send className="mr-2 h-4 w-4" />
-                Send Follow-Up
-              </>
-            )}
-          </Button>
-        </form>
+            
+            <Button
+              type="submit"
+              disabled={loading}
+              className="w-full"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                "Submit"
+              )}
+            </Button>
+          </form>
+        </CardContent>
       </Card>
 
-      {renderResponse()}
-      {renderError()}
+      {/* Response Display */}
+      <div ref={resultsRef}>
+        {response && (
+          <Card className="mt-6 border-border bg-card/50">{renderResponse()}</Card>
+        )}
+
+        {/* Error Display */}
+        {error && renderError()}
+      </div>
     </div>
   );
 };
