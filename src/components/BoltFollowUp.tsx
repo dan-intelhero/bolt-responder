@@ -13,6 +13,8 @@ interface WebhookResponse {
 
 export const BoltFollowUp = () => {
   const [email, setEmail] = useState("");
+  const [domain, setDomain] = useState("");
+  const [myEmail, setMyEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState<WebhookResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -21,11 +23,29 @@ export const BoltFollowUp = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Basic email validation
+    // Basic validation
     if (!email || !email.includes("@")) {
       toast({
         title: "Invalid email",
         description: "Please enter a valid email address",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!domain || !domain.includes(".")) {
+      toast({
+        title: "Invalid domain",
+        description: "Please enter a valid domain",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!myEmail || !myEmail.includes("@")) {
+      toast({
+        title: "Invalid my email",
+        description: "Please enter a valid email address for 'My Email'",
         variant: "destructive",
       });
       return;
@@ -41,7 +61,7 @@ export const BoltFollowUp = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, domain, myEmail }),
       });
 
       if (!result.ok) {
@@ -221,6 +241,38 @@ export const BoltFollowUp = () => {
               placeholder="Enter email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              disabled={loading}
+              className="bg-background border-input"
+              required
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="domain" className="text-foreground font-medium">
+              Domain
+            </Label>
+            <Input
+              id="domain"
+              type="text"
+              placeholder="Enter domain"
+              value={domain}
+              onChange={(e) => setDomain(e.target.value)}
+              disabled={loading}
+              className="bg-background border-input"
+              required
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="myEmail" className="text-foreground font-medium">
+              My Email
+            </Label>
+            <Input
+              id="myEmail"
+              type="email"
+              placeholder="Enter your email address"
+              value={myEmail}
+              onChange={(e) => setMyEmail(e.target.value)}
               disabled={loading}
               className="bg-background border-input"
               required
