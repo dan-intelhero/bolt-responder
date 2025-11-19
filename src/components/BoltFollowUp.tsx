@@ -68,6 +68,38 @@ export const BoltFollowUp = () => {
     }
   };
 
+  const formatFieldName = (key: string): string => {
+    return key
+      .split('_')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  };
+
+  const formatValue = (value: any): string => {
+    if (value === null || value === undefined) return 'N/A';
+    if (typeof value === 'boolean') return value ? 'Yes' : 'No';
+    if (typeof value === 'object') {
+      // Pretty print objects/arrays
+      return JSON.stringify(value, null, 2);
+    }
+    // Check if it's a date string
+    if (typeof value === 'string' && value.match(/^\d{4}-\d{2}-\d{2}/)) {
+      try {
+        const date = new Date(value);
+        return date.toLocaleString('en-US', {
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+      } catch {
+        return String(value);
+      }
+    }
+    return String(value);
+  };
+
   const renderResponse = () => {
     if (!response) return null;
 
@@ -77,17 +109,14 @@ export const BoltFollowUp = () => {
           <CheckCircle2 className="h-5 w-5 text-accent mt-0.5 flex-shrink-0" />
           <div className="flex-1">
             <h3 className="font-semibold text-lg text-foreground mb-2">Workflow Response</h3>
-            <div className="space-y-3">
+            <div className="space-y-4">
               {Object.entries(response).map(([key, value]) => (
-                <div key={key} className="border-l-2 border-accent/30 pl-4">
-                  <div className="text-sm font-medium text-muted-foreground capitalize mb-1">
-                    {key.replace(/_/g, " ")}
+                <div key={key} className="border-l-2 border-accent/30 pl-4 py-1">
+                  <div className="text-sm font-medium text-muted-foreground mb-1">
+                    {formatFieldName(key)}
                   </div>
-                  <div className="text-foreground">
-                    {typeof value === "object" 
-                      ? JSON.stringify(value, null, 2)
-                      : String(value)
-                    }
+                  <div className="text-foreground whitespace-pre-wrap break-words">
+                    {formatValue(value)}
                   </div>
                 </div>
               ))}
