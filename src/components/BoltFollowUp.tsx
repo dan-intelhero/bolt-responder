@@ -35,7 +35,7 @@ export const BoltFollowUp = () => {
     setResponse(null);
 
     try {
-      const result = await fetch("https://intelhero.app.n8n.cloud/webhook/bolt-followup", {
+      const result = await fetch("https://intelhero.app.n8n.cloud/webhook-test/bolt-followup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
