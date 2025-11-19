@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Loader2, Send, CheckCircle2, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import ReactMarkdown from "react-markdown";
 
 interface WebhookResponse {
   [key: string]: any;
@@ -103,6 +104,69 @@ export const BoltFollowUp = () => {
   const renderResponse = () => {
     if (!response) return null;
 
+    // Handle array responses with text content
+    if (Array.isArray(response) && response.length > 0 && response[0].text) {
+      return (
+        <Card className="p-6 bg-card border-border shadow-soft animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div className="flex items-start gap-3 mb-4">
+            <CheckCircle2 className="h-5 w-5 text-accent mt-0.5 flex-shrink-0" />
+            <div className="flex-1">
+              <h3 className="font-semibold text-lg text-foreground mb-4">Analysis Results</h3>
+              <div className="prose prose-sm max-w-none dark:prose-invert prose-headings:text-foreground prose-p:text-foreground prose-strong:text-foreground prose-ul:text-foreground prose-ol:text-foreground">
+                <ReactMarkdown
+                  components={{
+                    h2: ({ children }) => (
+                      <h2 className="text-xl font-bold text-foreground mt-6 mb-3 border-b border-border pb-2">
+                        {children}
+                      </h2>
+                    ),
+                    h3: ({ children }) => (
+                      <h3 className="text-lg font-semibold text-foreground mt-4 mb-2">
+                        {children}
+                      </h3>
+                    ),
+                    ul: ({ children }) => (
+                      <ul className="list-disc list-inside space-y-1 my-3 ml-2">
+                        {children}
+                      </ul>
+                    ),
+                    ol: ({ children }) => (
+                      <ol className="list-decimal list-inside space-y-1 my-3 ml-2">
+                        {children}
+                      </ol>
+                    ),
+                    li: ({ children }) => (
+                      <li className="text-foreground leading-relaxed">
+                        {children}
+                      </li>
+                    ),
+                    p: ({ children }) => (
+                      <p className="text-foreground leading-relaxed mb-3">
+                        {children}
+                      </p>
+                    ),
+                    strong: ({ children }) => (
+                      <strong className="font-semibold text-foreground">
+                        {children}
+                      </strong>
+                    ),
+                    blockquote: ({ children }) => (
+                      <blockquote className="border-l-4 border-accent pl-4 py-2 my-3 bg-muted/30 rounded-r">
+                        {children}
+                      </blockquote>
+                    ),
+                  }}
+                >
+                  {response[0].text}
+                </ReactMarkdown>
+              </div>
+            </div>
+          </div>
+        </Card>
+      );
+    }
+
+    // Default object rendering for other response types
     return (
       <Card className="p-6 bg-card border-border shadow-soft animate-in fade-in slide-in-from-bottom-4 duration-500">
         <div className="flex items-start gap-3 mb-4">
