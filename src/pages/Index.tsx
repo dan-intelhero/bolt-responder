@@ -24,10 +24,6 @@ const Index = () => {
           </section>
         </main>
 
-        {/* Footer */}
-        <footer className="mt-16 pt-8 border-t border-border text-center text-sm text-muted-foreground">
-          <p>Powered by N8N Workflows • Secure & Reliable Automation</p>
-        </footer>
       </div>
     </div>
   );
