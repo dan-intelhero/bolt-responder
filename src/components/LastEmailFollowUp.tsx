@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Loader2, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import ReactMarkdown from "react-markdown";
 
 interface WebhookResponse {
   [key: string]: any;
@@ -92,8 +91,8 @@ export const LastEmailFollowUp = () => {
       .join(' ');
   };
 
-  // All string fields from the webhook are markdown, so we render them as such
-  const isMarkdownContent = (value: any): boolean => typeof value === 'string';
+  // All string fields from the webhook are HTML, so we render them as such
+  const isHTMLContent = (value: any): boolean => typeof value === 'string';
 
   const formatValue = (value: any): string => {
     if (value === null || value === undefined) return 'N/A';
@@ -131,9 +130,10 @@ export const LastEmailFollowUp = () => {
             <Card key={index} className="bg-card">
               <CardContent className="pt-6">
                 {typeof item === 'object' && item.text ? (
-                  <div className="prose prose-sm max-w-none dark:prose-invert">
-                    <ReactMarkdown>{item.text}</ReactMarkdown>
-                  </div>
+                  <div 
+                    className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-bold prose-h1:text-3xl prose-h1:mb-4 prose-h2:text-2xl prose-h2:mt-6 prose-h2:mb-3 prose-h3:text-xl prose-h3:mt-4 prose-h3:mb-2 prose-p:text-base prose-p:leading-7 prose-p:mb-4 prose-ul:my-4 prose-ol:my-4 prose-li:text-base prose-li:leading-7 prose-li:mb-2 prose-strong:font-semibold prose-strong:text-foreground"
+                    dangerouslySetInnerHTML={{ __html: item.text }}
+                  />
                 ) : (
                   <div className="space-y-3">
                     {Object.entries(item).map(([key, value]) => (
@@ -143,9 +143,10 @@ export const LastEmailFollowUp = () => {
                         </dt>
                         <dd className="text-sm">
                           {typeof value === 'string' ? (
-                            <div className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-bold prose-h1:text-3xl prose-h1:mb-4 prose-h2:text-2xl prose-h2:mt-6 prose-h2:mb-3 prose-h3:text-xl prose-h3:mt-4 prose-h3:mb-2 prose-p:text-base prose-p:leading-7 prose-p:mb-4 prose-ul:my-4 prose-ol:my-4 prose-li:text-base prose-li:leading-7 prose-li:mb-2 prose-strong:font-semibold prose-strong:text-foreground">
-                              <ReactMarkdown>{value}</ReactMarkdown>
-                            </div>
+                            <div 
+                              className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-bold prose-h1:text-3xl prose-h1:mb-4 prose-h2:text-2xl prose-h2:mt-6 prose-h2:mb-3 prose-h3:text-xl prose-h3:mt-4 prose-h3:mb-2 prose-p:text-base prose-p:leading-7 prose-p:mb-4 prose-ul:my-4 prose-ol:my-4 prose-li:text-base prose-li:leading-7 prose-li:mb-2 prose-strong:font-semibold prose-strong:text-foreground"
+                              dangerouslySetInnerHTML={{ __html: value }}
+                            />
                           ) : (
                             <span className="whitespace-pre-wrap text-muted-foreground">{formatValue(value)}</span>
                           )}
@@ -173,10 +174,11 @@ export const LastEmailFollowUp = () => {
                     {formatFieldName(key)}
                   </dt>
                   <dd className="text-sm">
-                    {isMarkdownContent(value) ? (
-                      <div className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-bold prose-h1:text-3xl prose-h1:mb-4 prose-h2:text-2xl prose-h2:mt-6 prose-h2:mb-3 prose-h3:text-xl prose-h3:mt-4 prose-h3:mb-2 prose-p:text-base prose-p:leading-7 prose-p:mb-4 prose-ul:my-4 prose-ol:my-4 prose-li:text-base prose-li:leading-7 prose-li:mb-2 prose-strong:font-semibold prose-strong:text-foreground">
-                        <ReactMarkdown>{String(value)}</ReactMarkdown>
-                      </div>
+                    {isHTMLContent(value) ? (
+                      <div 
+                        className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-bold prose-h1:text-3xl prose-h1:mb-4 prose-h2:text-2xl prose-h2:mt-6 prose-h2:mb-3 prose-h3:text-xl prose-h3:mt-4 prose-h3:mb-2 prose-p:text-base prose-p:leading-7 prose-p:mb-4 prose-ul:my-4 prose-ol:my-4 prose-li:text-base prose-li:leading-7 prose-li:mb-2 prose-strong:font-semibold prose-strong:text-foreground"
+                        dangerouslySetInnerHTML={{ __html: String(value) }}
+                      />
                     ) : (
                       <span className="whitespace-pre-wrap text-muted-foreground">{formatValue(value)}</span>
                     )}
