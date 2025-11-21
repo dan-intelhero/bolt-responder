@@ -96,7 +96,7 @@ export const LastEmailFollowUp = () => {
     if (typeof value !== 'string') return false;
     // Check for common markdown patterns
     return value.includes('##') || value.includes('**') || value.includes('- ') || 
-           value.includes('\n\n') || value.includes('###');
+           value.includes('\n\n') || value.includes('###') || value.includes('* ');
   };
 
   const formatValue = (value: any): string => {
@@ -172,8 +172,18 @@ export const LastEmailFollowUp = () => {
                   </dt>
                   <dd className="text-sm text-muted-foreground">
                     {isMarkdownContent(value) ? (
-                      <div className="prose prose-sm max-w-none dark:prose-invert">
-                        <ReactMarkdown>{String(value)}</ReactMarkdown>
+                      <div className="prose prose-sm max-w-none dark:prose-invert prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground prose-li:text-muted-foreground prose-ul:my-2 prose-ol:my-2">
+                        <ReactMarkdown
+                          components={{
+                            ul: ({node, ...props}) => <ul className="list-disc pl-5 space-y-1" {...props} />,
+                            ol: ({node, ...props}) => <ol className="list-decimal pl-5 space-y-1" {...props} />,
+                            li: ({node, ...props}) => <li className="ml-0" {...props} />,
+                            p: ({node, ...props}) => <p className="my-2" {...props} />,
+                            strong: ({node, ...props}) => <strong className="font-semibold text-foreground" {...props} />,
+                          }}
+                        >
+                          {String(value)}
+                        </ReactMarkdown>
                       </div>
                     ) : (
                       <span className="whitespace-pre-wrap">{formatValue(value)}</span>
