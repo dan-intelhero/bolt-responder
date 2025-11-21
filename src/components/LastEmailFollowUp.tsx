@@ -92,6 +92,13 @@ export const LastEmailFollowUp = () => {
       .join(' ');
   };
 
+  const isMarkdownContent = (value: any): boolean => {
+    if (typeof value !== 'string') return false;
+    // Check for common markdown patterns
+    return value.includes('##') || value.includes('**') || value.includes('- ') || 
+           value.includes('\n\n') || value.includes('###');
+  };
+
   const formatValue = (value: any): string => {
     if (value === null || value === undefined) return 'N/A';
     if (typeof value === 'boolean') return value ? 'Yes' : 'No';
@@ -163,8 +170,14 @@ export const LastEmailFollowUp = () => {
                   <dt className="text-sm font-semibold text-foreground mb-1">
                     {formatFieldName(key)}
                   </dt>
-                  <dd className="text-sm text-muted-foreground whitespace-pre-wrap">
-                    {formatValue(value)}
+                  <dd className="text-sm text-muted-foreground">
+                    {isMarkdownContent(value) ? (
+                      <div className="prose prose-sm max-w-none dark:prose-invert">
+                        <ReactMarkdown>{String(value)}</ReactMarkdown>
+                      </div>
+                    ) : (
+                      <span className="whitespace-pre-wrap">{formatValue(value)}</span>
+                    )}
                   </dd>
                 </div>
               ))}
