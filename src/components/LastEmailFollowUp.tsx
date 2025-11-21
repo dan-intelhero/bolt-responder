@@ -172,7 +172,7 @@ export const LastEmailFollowUp = () => {
                   </dt>
                   <dd className="text-sm">
                     {isMarkdownContent(value) ? (
-                      <div className="prose prose-sm max-w-none dark:prose-invert [&>*]:text-muted-foreground [&_strong]:text-foreground [&_strong]:font-semibold [&_h1]:text-foreground [&_h2]:text-foreground [&_h3]:text-foreground [&_h4]:text-foreground [&_ul]:space-y-1 [&_ol]:space-y-1 [&_li]:leading-relaxed">
+                      <div className="prose prose-sm max-w-none dark:prose-invert prose-headings:font-semibold prose-h1:text-2xl prose-h2:text-xl prose-h3:text-lg prose-p:my-2 prose-ul:my-2 prose-ol:my-2 prose-li:my-1">
                         <ReactMarkdown>{String(value)}</ReactMarkdown>
                       </div>
                     ) : (
