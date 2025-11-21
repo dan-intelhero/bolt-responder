@@ -92,12 +92,8 @@ export const LastEmailFollowUp = () => {
       .join(' ');
   };
 
-  const isMarkdownContent = (value: any): boolean => {
-    if (typeof value !== 'string') return false;
-    // Check for common markdown patterns
-    return value.includes('##') || value.includes('**') || value.includes('- ') || 
-           value.includes('\n\n') || value.includes('###') || value.includes('* ');
-  };
+  // All string fields from the webhook are markdown, so we render them as such
+  const isMarkdownContent = (value: any): boolean => typeof value === 'string';
 
   const formatValue = (value: any): string => {
     if (value === null || value === undefined) return 'N/A';
@@ -145,8 +141,14 @@ export const LastEmailFollowUp = () => {
                         <dt className="text-sm font-semibold text-foreground mb-1">
                           {formatFieldName(key)}
                         </dt>
-                        <dd className="text-sm text-muted-foreground whitespace-pre-wrap">
-                          {formatValue(value)}
+                        <dd className="text-sm text-muted-foreground">
+                          {typeof value === 'string' ? (
+                            <div className="prose prose-sm max-w-none dark:prose-invert prose-headings:font-semibold prose-h1:text-2xl prose-h2:text-xl prose-h3:text-lg prose-p:my-2 prose-ul:my-2 prose-ol:my-2 prose-li:my-1">
+                              <ReactMarkdown>{value}</ReactMarkdown>
+                            </div>
+                          ) : (
+                            <span className="whitespace-pre-wrap">{formatValue(value)}</span>
+                          )}
                         </dd>
                       </div>
                     ))}
