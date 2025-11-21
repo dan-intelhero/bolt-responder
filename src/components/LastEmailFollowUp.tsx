@@ -170,23 +170,13 @@ export const LastEmailFollowUp = () => {
                   <dt className="text-sm font-semibold text-foreground mb-1">
                     {formatFieldName(key)}
                   </dt>
-                  <dd className="text-sm text-muted-foreground">
+                  <dd className="text-sm">
                     {isMarkdownContent(value) ? (
-                      <div className="prose prose-sm max-w-none dark:prose-invert prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground prose-li:text-muted-foreground prose-ul:my-2 prose-ol:my-2">
-                        <ReactMarkdown
-                          components={{
-                            ul: ({node, ...props}) => <ul className="list-disc pl-5 space-y-1" {...props} />,
-                            ol: ({node, ...props}) => <ol className="list-decimal pl-5 space-y-1" {...props} />,
-                            li: ({node, ...props}) => <li className="ml-0" {...props} />,
-                            p: ({node, ...props}) => <p className="my-2" {...props} />,
-                            strong: ({node, ...props}) => <strong className="font-semibold text-foreground" {...props} />,
-                          }}
-                        >
-                          {String(value)}
-                        </ReactMarkdown>
+                      <div className="prose prose-sm max-w-none dark:prose-invert [&>*]:text-muted-foreground [&_strong]:text-foreground [&_strong]:font-semibold [&_h1]:text-foreground [&_h2]:text-foreground [&_h3]:text-foreground [&_h4]:text-foreground [&_ul]:space-y-1 [&_ol]:space-y-1 [&_li]:leading-relaxed">
+                        <ReactMarkdown>{String(value)}</ReactMarkdown>
                       </div>
                     ) : (
-                      <span className="whitespace-pre-wrap">{formatValue(value)}</span>
+                      <span className="whitespace-pre-wrap text-muted-foreground">{formatValue(value)}</span>
                     )}
                   </dd>
                 </div>
