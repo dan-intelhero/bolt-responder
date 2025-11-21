@@ -1,4 +1,3 @@
-import { BoltFollowUp } from "@/components/BoltFollowUp";
 import { LastEmailFollowUp } from "@/components/LastEmailFollowUp";
 
 const Index = () => {
@@ -13,21 +12,11 @@ const Index = () => {
         </header>
 
         {/* Main Content */}
-        <main className="space-y-12">
+        <main>
           <section>
             <div className="mb-6">
               <h2 className="text-2xl font-semibold text-foreground mb-2">
-                Bolt Follow-Up
-              </h2>
-            </div>
-            
-            <BoltFollowUp />
-          </section>
-
-          <section>
-            <div className="mb-6">
-              <h2 className="text-2xl font-semibold text-foreground mb-2">
-                Last Email Follow-Up
+                Email Draftinator
               </h2>
             </div>
             
