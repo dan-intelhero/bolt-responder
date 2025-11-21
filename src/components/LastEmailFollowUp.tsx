@@ -141,13 +141,13 @@ export const LastEmailFollowUp = () => {
                         <dt className="text-sm font-semibold text-foreground mb-1">
                           {formatFieldName(key)}
                         </dt>
-                        <dd className="text-sm text-muted-foreground">
+                        <dd className="text-sm">
                           {typeof value === 'string' ? (
-                            <div className="prose prose-sm max-w-none dark:prose-invert prose-headings:font-semibold prose-h1:text-2xl prose-h2:text-xl prose-h3:text-lg prose-p:my-2 prose-ul:my-2 prose-ol:my-2 prose-li:my-1">
+                            <div className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-bold prose-h1:text-3xl prose-h1:mb-4 prose-h2:text-2xl prose-h2:mt-6 prose-h2:mb-3 prose-h3:text-xl prose-h3:mt-4 prose-h3:mb-2 prose-p:text-base prose-p:leading-7 prose-p:mb-4 prose-ul:my-4 prose-ol:my-4 prose-li:text-base prose-li:leading-7 prose-li:mb-2 prose-strong:font-semibold prose-strong:text-foreground">
                               <ReactMarkdown>{value}</ReactMarkdown>
                             </div>
                           ) : (
-                            <span className="whitespace-pre-wrap">{formatValue(value)}</span>
+                            <span className="whitespace-pre-wrap text-muted-foreground">{formatValue(value)}</span>
                           )}
                         </dd>
                       </div>
@@ -174,7 +174,7 @@ export const LastEmailFollowUp = () => {
                   </dt>
                   <dd className="text-sm">
                     {isMarkdownContent(value) ? (
-                      <div className="prose prose-sm max-w-none dark:prose-invert prose-headings:font-semibold prose-h1:text-2xl prose-h2:text-xl prose-h3:text-lg prose-p:my-2 prose-ul:my-2 prose-ol:my-2 prose-li:my-1">
+                      <div className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-bold prose-h1:text-3xl prose-h1:mb-4 prose-h2:text-2xl prose-h2:mt-6 prose-h2:mb-3 prose-h3:text-xl prose-h3:mt-4 prose-h3:mb-2 prose-p:text-base prose-p:leading-7 prose-p:mb-4 prose-ul:my-4 prose-ol:my-4 prose-li:text-base prose-li:leading-7 prose-li:mb-2 prose-strong:font-semibold prose-strong:text-foreground">
                         <ReactMarkdown>{String(value)}</ReactMarkdown>
                       </div>
                     ) : (
