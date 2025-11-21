@@ -13,7 +13,6 @@ interface WebhookResponse {
 export const LastEmailFollowUp = () => {
   const [email, setEmail] = useState("");
   const [domain, setDomain] = useState("");
-  const [myEmail, setMyEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState<WebhookResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -42,15 +41,6 @@ export const LastEmailFollowUp = () => {
       return;
     }
 
-    if (!myEmail || !myEmail.includes("@")) {
-      toast({
-        title: "Invalid my email",
-        description: "Please enter a valid email address for 'My Email'",
-        variant: "destructive",
-      });
-      return;
-    }
-
     setLoading(true);
     setError(null);
     setResponse(null);
@@ -61,7 +51,7 @@ export const LastEmailFollowUp = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, domain, myEmail }),
+        body: JSON.stringify({ email, domain }),
       });
 
       if (!result.ok) {
@@ -234,15 +224,6 @@ export const LastEmailFollowUp = () => {
                 placeholder="Domain"
                 value={domain}
                 onChange={(e) => setDomain(e.target.value)}
-                disabled={loading}
-                required
-              />
-
-              <Input
-                type="email"
-                placeholder="My Email"
-                value={myEmail}
-                onChange={(e) => setMyEmail(e.target.value)}
                 disabled={loading}
                 required
               />
